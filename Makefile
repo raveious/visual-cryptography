@@ -2,7 +2,6 @@ all: VisualCryptography
 
 VisualCryptography: VisualCryptographyGPU.o VisualCryptographyMC.o ExtVisualCryptographyCPU.o ExtVisualCryptographyGPU.o ExtVisualCryptographyMC.o VisualCryptographyCPUTest.o
 	g++ *.o  -L/usr/local/cuda/lib64 -lcudart -lpthread ./lib/libVC.a -o VisualCryptography
-	rm -rf *.o
 
 VisualCryptographyMC.o: ./source/VisualCryptographyMC.c
 	g++ -lpthread -c ./source/VisualCryptographyMC.c
@@ -28,5 +27,3 @@ clean:
 makelib: main.o preprocess.o VisualCryptographyCPU.o
 	ar rcs libVC.a main.o preprocess.o VisualCryptographyCPU.o
 	rm -rf *.o
-
-
