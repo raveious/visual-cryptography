@@ -103,7 +103,7 @@ __global__ void CodecKernel(level *pImage_d, level *pShare1_d, level *pShare2_d,
       }
 
 			// NOTE: The suppied solution uses logical NOR operation instead of
-			// logical AND, but this isn't doesn't yield the same result as what the
+			// logical AND, but this doesn't yield the same result as what the
 			// project description describes
     }
   }

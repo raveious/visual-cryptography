@@ -110,7 +110,7 @@ void *PartialCodec(void *pcMCDataArg) {
 			pcMCData->pImgData[i] = pcMCData->pShare1[i] & pcMCData->pShare2[i];
 
 			// NOTE: The suppied solution uses logical NOR operation instead of
-			// logical AND, but this isn't doesn't yield the same result as what the
+			// logical AND, but this doesn't yield the same result as what the
 			// project description describes
 		}
 	}
