@@ -195,6 +195,12 @@ void VCEncoderGPU(ImageData *pcShare1, ImageData *pcShare2, ImageData *pcImageDa
   // ENCODE_TILE_SIZE x ENCODE_TILE_SIZE
 	gridSizeX  = pcImageData->iWidth / ENCODE_TILE_SIZE;
 	gridSizeY  = pcImageData->iHeight / ENCODE_TILE_SIZE;
+
+  if (gridSizeX < 1)
+    gridSizeX = 1;
+
+  if (gridSizeY < 1)
+    gridSizeY = 1;
   // ********************************************************************************
   // End of CUDA block size and grid size parameters                                *
   // DO NOT CHANGE ANYTHING AFTER THIS POINT in YOUR CODE                           *
@@ -280,6 +286,12 @@ void VCDecoderGPU(ImageData *pcShare1, ImageData *pcShare2, char *pInputImageNam
   // DECODE_TILE_SIZE x DECODE_TILE_SIZE
 	gridSizeX  = pcImageData->iWidth / DECODE_TILE_SIZE;
 	gridSizeY  = pcImageData->iHeight / DECODE_TILE_SIZE;
+
+  if (gridSizeX < 1)
+    gridSizeX = 1;
+
+  if (gridSizeY < 1)
+    gridSizeY = 1;
   // ********************************************************************************
   // End of CUDA block size and grid size parameters                                *
   // DO NOT CHANGE ANYTHING AFTER THIS POINT in YOUR CODE                           *
