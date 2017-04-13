@@ -11,17 +11,11 @@
 #include "common.h"
 #include "VisualCryptographyMC.h"
 
-static const level WhiteShare1_A[2][2] = {0,0,1,1};
-static const level WhiteShare2_A[2][2] = {0,0,1,1};
+static const level WhiteShare1[2][2] = {0,0,1,1};
+static const level WhiteShare2[2][2] = {0,0,1,1};
 
-static const level WhiteShare1_B[2][2] = {1,1,0,0};
-static const level WhiteShare2_B[2][2] = {1,1,0,0};
-
-static const level BlackShare1_A[2][2] = {1,1,0,0};
-static const level BlackShare2_A[2][2] = {0,0,1,1};
-
-static const level BlackShare1_B[2][2] = {0,0,1,1};
-static const level BlackShare2_B[2][2] = {1,1,0,0};
+static const level BlackShare1[2][2] = {1,1,0,0};
+static const level BlackShare2[2][2] = {0,0,1,1};
 
 void GenerateShareMC(level cColor, level share1[][2], level share2[][2], unsigned int r) {
 // ************************************************************************************
@@ -75,31 +69,31 @@ void *PartialCodec(void *pcMCDataArg) {
 
 		// loop over this threads segment
 		for (int i = offset; i < (offset + segment_size); i++) {
-			invert = rand_r(pcMCData->pSeeds) >> 30;
+			invert = rand_r(pcMCData->pSeeds) % 2;
 			share_offset = (i * 2) + ((i / pcMCData->iWidth) * (pcMCData->iWidth * 2));
 			alt_share_offset = share_offset + (pcMCData->iWidth * 2);
 
 			// Select White or Black shares
 			if (pcMCData->pImgData[i]) {
-				pcMCData->pShare1[share_offset] = (invert ? WhiteShare1_A[0][0] : WhiteShare1_B[0][0]);
-				pcMCData->pShare1[share_offset + 1] = (invert ? WhiteShare1_A[0][1] : WhiteShare1_B[0][1]);
-				pcMCData->pShare1[alt_share_offset] = (invert ? WhiteShare1_A[1][0] : WhiteShare1_B[1][0]);
-				pcMCData->pShare1[alt_share_offset + 1] = (invert ? WhiteShare1_A[1][1] : WhiteShare1_B[1][1]);
+				pcMCData->pShare1[share_offset]         = WhiteShare1[0][0] ^ invert;
+				pcMCData->pShare1[share_offset + 1]     = WhiteShare1[0][1] ^ invert;
+				pcMCData->pShare1[alt_share_offset]     = WhiteShare1[1][0] ^ invert;
+				pcMCData->pShare1[alt_share_offset + 1] = WhiteShare1[1][1] ^ invert;
 
-				pcMCData->pShare2[share_offset] = (invert ? WhiteShare2_A[0][0] : WhiteShare2_B[0][0]);
-				pcMCData->pShare2[share_offset + 1] = (invert ? WhiteShare2_A[0][1] : WhiteShare2_B[0][1]);
-				pcMCData->pShare2[alt_share_offset] = (invert ? WhiteShare2_A[1][0] : WhiteShare2_B[1][0]);
-				pcMCData->pShare2[alt_share_offset + 1] = (invert ? WhiteShare2_A[1][1] : WhiteShare2_B[1][1]);
+				pcMCData->pShare2[share_offset]         = WhiteShare2[0][0] ^ invert;
+				pcMCData->pShare2[share_offset + 1]     = WhiteShare2[0][1] ^ invert;
+				pcMCData->pShare2[alt_share_offset]     = WhiteShare2[1][0] ^ invert;
+				pcMCData->pShare2[alt_share_offset + 1] = WhiteShare2[1][1] ^ invert;
 			} else {
-				pcMCData->pShare1[share_offset] = (invert ? BlackShare1_A[0][0] : BlackShare1_B[0][0]);
-				pcMCData->pShare1[share_offset + 1] = (invert ? BlackShare1_A[0][1] : BlackShare1_B[0][1]);
-				pcMCData->pShare1[alt_share_offset] = (invert ? BlackShare1_A[1][0] : BlackShare1_B[1][0]);
-				pcMCData->pShare1[alt_share_offset + 1] = (invert ? BlackShare1_A[1][1] : BlackShare1_B[1][1]);
+				pcMCData->pShare1[share_offset]         = BlackShare1[0][0] ^ invert;
+				pcMCData->pShare1[share_offset + 1]     = BlackShare1[0][1] ^ invert;
+				pcMCData->pShare1[alt_share_offset]     = BlackShare1[1][0] ^ invert;
+				pcMCData->pShare1[alt_share_offset + 1] = BlackShare1[1][1] ^ invert;
 
-				pcMCData->pShare2[share_offset] = (invert ? BlackShare2_A[0][0] : BlackShare2_B[0][0]);
-				pcMCData->pShare2[share_offset + 1] = (invert ? BlackShare2_A[0][1] : BlackShare2_B[0][1]);
-				pcMCData->pShare2[alt_share_offset] = (invert ? BlackShare2_A[1][0] : BlackShare2_B[1][0]);
-				pcMCData->pShare2[alt_share_offset + 1] = (invert ? BlackShare2_A[1][1] : BlackShare2_B[1][1]);
+				pcMCData->pShare2[share_offset]         = BlackShare2[0][0] ^ invert;
+				pcMCData->pShare2[share_offset + 1]     = BlackShare2[0][1] ^ invert;
+				pcMCData->pShare2[alt_share_offset]     = BlackShare2[1][0] ^ invert;
+				pcMCData->pShare2[alt_share_offset + 1] = BlackShare2[1][1] ^ invert;
 			}
 		}
 	}
@@ -147,7 +141,7 @@ void VCEncoderMC(ImageData *pcShare1, ImageData *pcShare2, ImageData *pcImageDat
 	// Number of threads goes in here.                                                *
 	// ********************************************************************************
 
-	iNumOfThreads = 4;
+	iNumOfThreads = 64;
 
  	printf("|--Number of Multicore Encoding Threads: \%d \n",iNumOfThreads);
 
@@ -261,7 +255,7 @@ void VCDecoderMC(ImageData *pcShare1, ImageData *pcShare2, char *pInputImageName
 	// Number of threads goes in here.                                                *
 	// ********************************************************************************
 
-	iNumOfThreads = 4;
+	iNumOfThreads = 16;
 
  	printf("|--Number of Multicore Decoding Threads: \%d \n",iNumOfThreads);
 
