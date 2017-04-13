@@ -14,8 +14,8 @@
 static const level WhiteShare1[2][2] = {0,0,1,1};
 static const level WhiteShare2[2][2] = {0,0,1,1};
 
-static const level BlackShare1[2][2] = {1,1,0,0};
-static const level BlackShare2[2][2] = {0,0,1,1};
+static const level BlackShare1[2][2] = {0,0,1,1};
+static const level BlackShare2[2][2] = {1,1,0,0};
 
 void GenerateShareMC(level cColor, level share1[][2], level share2[][2], unsigned int r) {
 // ************************************************************************************
