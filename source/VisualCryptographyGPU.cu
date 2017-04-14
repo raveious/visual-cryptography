@@ -13,7 +13,7 @@
 #include "common.h"
 #include "VisualCryptographyGPU.h"
 
-#define ENCODE_TILE_SIZE 512
+#define ENCODE_TILE_SIZE 128
 #define DECODE_TILE_SIZE 256
 
 __constant__ level WhiteShare1[2][2] = {0,0,1,1};
