@@ -23,7 +23,7 @@ __constant__ level BlackShare1[2][2] = {0,0,1,1};
 __constant__ level BlackShare2[2][2] = {1,1,0,0};
 
 void CheckCUDAError(const char *msg) {
-  cudaError_t code =cudaGetLastError();
+  cudaError_t code = cudaGetLastError();
   if(code!=cudaSuccess)
   {
       fprintf(stderr,"Cuda Error: %s: %s.\n",msg,cudaGetErrorString(code));
@@ -50,7 +50,7 @@ __global__ void CodecKernel(level *pImage_d, level *pShare1_d, level *pShare2_d,
     int alt_share_offset = 0;
     int temp = 0;
     curandState_t state;
-    curand_init(1234, offset, 0, &state);
+    curand_init(offset, 0, 0, &state);
 
     // loop over this threads segment
     for (int i = 0; i < ENCODE_TILE_SIZE * iWidth; i += iWidth) {
